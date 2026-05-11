@@ -1264,7 +1264,7 @@ p {
 /* Phones — 540 and below */
 @media (max-width: 540px) {
   .container {
-    padding-inline: 18px;
+    padding-inline: 24px;
   }
   .section {
     padding: clamp(48px, 12vw, 80px) 0;
@@ -1335,9 +1335,17 @@ p {
 
   /* Trust strip */
   .trust-strip__row {
-    padding: 16px 0;
-    gap: 10px;
-    font-size: 13px;
+    padding-block: 28px;
+    gap: 16px;
+    font-size: 13.5px;
+  }
+  .trust-strip__item {
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+  .trust-strip__dot {
+    margin-top: 7px;
   }
 
   /* Section heads */
@@ -1454,7 +1462,7 @@ p {
     width: 92%;
   }
   .container {
-    padding-inline: 16px;
+    padding-inline: 20px;
   }
 }
 
