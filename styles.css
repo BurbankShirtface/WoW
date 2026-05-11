@@ -41,7 +41,7 @@
   --shadow-lg: 0 24px 60px rgba(12, 18, 40, 0.14);
 
   --container: 1200px;
-  --gutter: clamp(20px, 4vw, 40px);
+  --gutter: clamp(24px, 5vw, 56px);
 
   --font-sans:
     "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
@@ -617,7 +617,7 @@ p {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  padding: 22px 0;
+  padding-block: 22px;
   font-size: 13px;
   font-weight: 500;
   color: var(--ink);
