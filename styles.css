@@ -210,10 +210,11 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 144px;
+  /* vmin keeps header shorter on wide-but-short laptop windows (vw alone balloons at ~1200px width). */
+  min-height: clamp(64px, min(11vw, 20vmin), 144px);
   gap: 16px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: clamp(6px, min(1.4vw, 1.4vmin), 16px);
+  padding-bottom: clamp(6px, min(1.4vw, 1.4vmin), 16px);
 }
 
 .brand {
@@ -221,21 +222,23 @@ p {
   align-items: center;
   gap: 12px;
   color: var(--ink);
+  min-width: 0;
 }
 .brand__mark {
-  height: 150px;
+  height: clamp(48px, min(10vw, 17vmin), 130px);
   width: auto;
   display: block;
 }
 
-@media (max-width: 600px) {
+/* Short viewports (small laptop displays, browser zoomed with chrome visible) */
+@media (max-height: 720px) and (min-width: 901px) {
   .nav {
-    min-height: 96px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    min-height: clamp(56px, 12vmin, 104px);
+    padding-top: 6px;
+    padding-bottom: 6px;
   }
   .brand__mark {
-    height: 72px;
+    height: clamp(44px, 10vmin, 96px);
   }
 }
 
@@ -1039,7 +1042,8 @@ p {
 .field input,
 .field select,
 .field textarea {
-  font: inherit;
+  font-family: inherit;
+  font-size: 16px;
   color: var(--ink);
   border: 1.5px solid #e3ddcc;
   background: #fbf9f3;
@@ -1050,6 +1054,7 @@ p {
     box-shadow 0.15s,
     background 0.15s;
   width: 100%;
+  max-width: 100%;
 }
 .field textarea {
   resize: vertical;
@@ -1182,4 +1187,221 @@ p {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* =========================================================
+   RESPONSIVE POLISH
+   Targeted tweaks for tablets and phones. Larger layout
+   already handled by main media queries above.
+========================================================= */
+
+/* Tablets / small laptops */
+@media (max-width: 1024px) {
+  .hero__grid {
+    gap: 36px;
+  }
+  .nav__menu {
+    gap: 22px;
+  }
+}
+
+/* Tablets — 760-900 range */
+@media (max-width: 900px) {
+  .display {
+    font-size: clamp(32px, 7vw, 52px);
+  }
+  .display--md {
+    font-size: clamp(26px, 5.4vw, 40px);
+  }
+  .hero__copy .lede {
+    margin-top: 16px;
+  }
+  .hero__cta {
+    margin-top: 22px;
+  }
+  .hero__visual {
+    gap: 14px;
+  }
+  .fees__list li,
+  .callout p {
+    font-size: 14px;
+  }
+}
+
+/* Phones — 540 and below */
+@media (max-width: 540px) {
+  .container {
+    padding-inline: 18px;
+  }
+  .section {
+    padding: clamp(48px, 12vw, 80px) 0;
+  }
+
+  /* Headline sizing */
+  .display {
+    font-size: clamp(28px, 8vw, 40px);
+    line-height: 1.08;
+  }
+  .display--md {
+    font-size: clamp(24px, 7vw, 34px);
+  }
+
+  /* Hero */
+  .hero__grid {
+    padding-top: clamp(28px, 8vw, 56px);
+    padding-bottom: 36px;
+    gap: 22px;
+  }
+  .hero__copy .lede {
+    font-size: 15px;
+  }
+  .hero__cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+  .hero__cta .btn {
+    width: 100%;
+    white-space: normal;
+  }
+  .hero__since {
+    font-size: 13px;
+    align-items: flex-start;
+  }
+  .eyebrow--pill {
+    white-space: normal;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  /* Trust strip */
+  .trust-strip__row {
+    padding: 16px 0;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  /* Section heads */
+  .section__head {
+    margin-bottom: 28px;
+  }
+  .section__sub {
+    font-size: 14px;
+  }
+
+  /* Process cards: tighter, smaller number badge */
+  .process-card {
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    padding: 18px 16px;
+  }
+  .process-card__num {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  .process-card h3 {
+    font-size: 16px;
+  }
+  .process-card p {
+    font-size: 14.5px;
+  }
+
+  /* Don't cards */
+  .dont-card {
+    padding: 18px 18px 20px;
+  }
+
+  /* Fees */
+  .fees__list li {
+    font-size: 14px;
+  }
+  .callout {
+    padding: 14px 16px;
+  }
+
+  /* Results card foot stacks vertically */
+  .result-card {
+    padding: 20px 18px;
+  }
+  .result-card__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .result-card__win {
+    text-align: left;
+  }
+
+  /* Horizon callout */
+  .horizon-card {
+    padding: 20px;
+    gap: 14px;
+  }
+  .horizon-card__icon {
+    width: 48px;
+    height: 48px;
+  }
+  .horizon-card__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .horizon-card h3 {
+    font-size: 17px;
+  }
+  .horizon-card p {
+    font-size: 14.5px;
+  }
+  .horizon-card .btn {
+    width: 100%;
+    white-space: normal;
+  }
+
+  /* Contact */
+  .contact__cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .contact__cta .btn {
+    width: 100%;
+  }
+  .contact-form {
+    padding: 22px 18px;
+  }
+
+  /* Footer bottom bar stacks */
+  .site-footer__bar-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .site-footer__links {
+    gap: 14px;
+  }
+}
+
+/* Very narrow phones — iPhone SE etc. */
+@media (max-width: 380px) {
+  .display {
+    font-size: 26px;
+    line-height: 1.1;
+  }
+  .display--md {
+    font-size: 22px;
+  }
+  .hero__logo-ring {
+    width: 92%;
+  }
+  .container {
+    padding-inline: 16px;
+  }
+}
+
+/* Safety net: prevent any unintended horizontal scroll */
+html,
+body {
+  overflow-x: clip;
 }
