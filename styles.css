@@ -1,9 +1,9 @@
 /* =========================================================
    Write Off Whiz — styles
    Palette
-     navy-900  #0a1638   (deepest bg)
-     navy-800  #0f1f4f   (primary navy)
-     navy-700  #16286a
+     navy-900  #15275f   (deepest bg)
+     navy-800  #1f3278   (primary navy)
+     navy-700  #2c4192
      gold-500  #f5b921   (primary accent)
      gold-600  #e6a817
      cream     #f5f3ee   (warm background)
@@ -13,10 +13,10 @@
 ========================================================= */
 
 :root {
-  --navy-900: #0a1638;
-  --navy-800: #0f1f4f;
-  --navy-700: #16286a;
-  --navy-600: #1f3486;
+  --navy-900: #15275f;
+  --navy-800: #1f3278;
+  --navy-700: #2c4192;
+  --navy-600: #3a52ab;
   --navy-line: rgba(255, 255, 255, 0.08);
   --gold-300: #ffd97a;
   --gold-500: #f5b921;
@@ -466,15 +466,30 @@ p {
   inset: 0;
   z-index: -1;
   background:
+    /* Bright spotlight behind the wizard logo */
     radial-gradient(
-      45% 60% at 85% 20%,
-      rgba(245, 185, 33, 0.16),
-      transparent 60%
+      55% 65% at 78% 50%,
+      rgba(120, 160, 255, 0.32),
+      rgba(31, 52, 134, 0.12) 45%,
+      transparent 70%
     ),
+    /* Warm gold haze, top-right */
     radial-gradient(
-      40% 50% at 15% 90%,
-      rgba(31, 52, 134, 0.55),
-      transparent 60%
+      50% 55% at 85% 18%,
+      rgba(245, 185, 33, 0.22),
+      transparent 65%
+    ),
+    /* Soft navy lift, bottom-left */
+    radial-gradient(
+      45% 55% at 12% 90%,
+      rgba(60, 92, 180, 0.55),
+      transparent 65%
+    ),
+    /* Subtle vignette to push focus center-right */
+    radial-gradient(
+      120% 90% at 60% 50%,
+      transparent 0%,
+      rgba(21, 39, 95, 0.45) 100%
     ),
     linear-gradient(180deg, var(--navy-800) 0%, var(--navy-900) 100%);
 }
@@ -543,6 +558,24 @@ p {
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.45));
+  animation: heroFloat 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__logo-ring img {
+    animation: none;
+  }
 }
 .hero__slogan {
   margin: 0;
@@ -1248,31 +1281,56 @@ p {
 
   /* Hero */
   .hero__grid {
-    padding-top: clamp(28px, 8vw, 56px);
-    padding-bottom: 36px;
-    gap: 22px;
+    padding-top: clamp(36px, 10vw, 64px);
+    padding-bottom: 56px;
+    gap: 36px;
+  }
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero__copy .eyebrow--pill {
+    margin-bottom: 4px;
+  }
+  .hero__copy .display {
+    margin-top: 24px;
   }
   .hero__copy .lede {
     font-size: 15px;
+    margin-top: 22px;
+    line-height: 1.65;
   }
   .hero__cta {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
+    margin-top: 32px;
   }
   .hero__cta .btn {
     width: 100%;
     white-space: normal;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+  .hero__visual {
+    gap: 22px;
+  }
+  .hero__slogan {
+    font-size: 18px;
+    line-height: 1.45;
+    padding: 0 4px;
   }
   .hero__since {
+    margin-top: 28px;
     font-size: 13px;
     align-items: flex-start;
   }
   .eyebrow--pill {
     white-space: normal;
-    line-height: 1.4;
+    line-height: 1.5;
     text-align: left;
+    padding: 10px 16px;
   }
 
   /* Trust strip */
