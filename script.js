@@ -18,6 +18,23 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // --- Header logo: smooth scroll to top (JS reinforces native #top + CSS scroll-behavior) ---
+  const brandHome = $('.brand[href="#top"]');
+  if (brandHome) {
+    brandHome.addEventListener('click', (e) => {
+      const reduce =
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const base = `${window.location.pathname}${window.location.search}`;
+      if (window.location.hash) {
+        history.replaceState(null, '', base);
+      }
+    });
+  }
+
   // --- Mobile nav toggle ---
   const toggle = $('.nav__toggle');
   const menu = $('#primary-nav');
@@ -162,68 +179,47 @@
     });
   }
 
-  // --- Results: reviews carousel (3 per slide, autoplay) ---
+  // --- Results: reviews carousel (manual advance only; no autoplay) ---
   const resultsCarousel = $('#results-carousel');
   const resultsTrack = $('#results-carousel-track');
   if (resultsCarousel && resultsTrack) {
-    const slideCount = $$('.results-carousel__slide', resultsTrack).length;
-    let index = 0;
-    let timer = null;
+    const slides = $$('.results-carousel__slide', resultsTrack);
+    const slideCount = slides.length;
+    if (slideCount) {
+      resultsTrack.style.width = `${slideCount * 100}%`;
+      slides.forEach((slide) => {
+        slide.style.flex = `0 0 ${100 / slideCount}%`;
+      });
 
-    const reducedMotion =
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reducedMotion) {
-      resultsCarousel.classList.add('is-reduced-motion');
-    }
+      let index = 0;
 
-    const goTo = (nextIndex) => {
-      index = ((nextIndex % slideCount) + slideCount) % slideCount;
-      const pct = (100 / slideCount) * index;
-      resultsTrack.style.transform = `translate3d(-${pct}%, 0, 0)`;
-    };
-
-    const restartAutoplay = () => {
-      if (timer) window.clearInterval(timer);
-      if (reducedMotion || slideCount <= 1) return;
-      timer = window.setInterval(() => goTo(index + 1), 5000);
-    };
-
-    const step = (dir) => {
-      goTo(index + dir);
-      restartAutoplay();
-    };
-
-    $('.results-carousel__arrow--prev', resultsCarousel)?.addEventListener(
-      'click',
-      () => step(-1),
-    );
-    $('.results-carousel__arrow--next', resultsCarousel)?.addEventListener(
-      'click',
-      () => step(1),
-    );
-
-    resultsCarousel.addEventListener('mouseenter', () => {
-      if (timer) window.clearInterval(timer);
-    });
-    resultsCarousel.addEventListener('mouseleave', restartAutoplay);
-
-    resultsCarousel.addEventListener('focusin', () => {
-      if (timer) window.clearInterval(timer);
-    });
-    resultsCarousel.addEventListener('focusout', (e) => {
-      if (!resultsCarousel.contains(e.relatedTarget)) restartAutoplay();
-    });
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        if (timer) window.clearInterval(timer);
-      } else {
-        restartAutoplay();
+      const reducedMotion =
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reducedMotion) {
+        resultsCarousel.classList.add('is-reduced-motion');
       }
-    });
 
-    goTo(0);
-    restartAutoplay();
+      const goTo = (nextIndex) => {
+        index = ((nextIndex % slideCount) + slideCount) % slideCount;
+        const pct = (100 / slideCount) * index;
+        resultsTrack.style.transform = `translate3d(-${pct}%, 0, 0)`;
+      };
+
+      const step = (dir) => {
+        goTo(index + dir);
+      };
+
+      $('.results-carousel__arrow--prev', resultsCarousel)?.addEventListener(
+        'click',
+        () => step(-1),
+      );
+      $('.results-carousel__arrow--next', resultsCarousel)?.addEventListener(
+        'click',
+        () => step(1),
+      );
+
+      goTo(0);
+    }
   }
 })();
