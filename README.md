@@ -1,33 +1,34 @@
 # Write Off Whiz — website
 
-Static, single-page site for **Write Off Whiz** (a division of Horizon Automotive Solutions Inc.). Plain HTML, CSS, and a tiny bit of vanilla JS — no build step, no dependencies. Drops onto any host (Netlify, Vercel, GitHub Pages, Cloudflare Pages, Replit, or just S3 + CloudFront).
+Static site for **Write Off Whiz** (a division of Horizon Automotive Solutions Inc.): HTML, CSS, and vanilla JS. The contact form posts to **[Formspree](https://formspree.io/)** (no Node server). Host anywhere that serves static files — **Render Static Site**, Netlify, GitHub Pages, S3, etc.
 
 ## File layout
 
 ```
-index.html      All page content
-styles.css      Theme, layout, responsive styles
-script.js       Sticky nav, mobile menu, reveal-on-scroll, contact form
-assets/
-  logo.svg              Wizard mascot (placeholder — replace with real artwork)
-  favicon.svg           Browser tab icon
-  apple-touch-icon.png  (optional — add a 180x180 PNG when ready)
-  og-image.png          (optional — add a 1200x630 PNG when ready for social share previews)
+index.html       All page content + Formspree form `action` URL
+styles.css       Theme, layout, responsive styles
+script.js        Nav, reveal-on-scroll, Formspree fetch submit
+assets/          Images, favicons, manifest
 ```
+
+## Contact form (Formspree)
+
+1. In the [Formspree dashboard](https://formspree.io/), create a form and copy its endpoint (looks like `https://formspree.io/f/abcdefgh`).
+2. In **`index.html`**, find the contact `<form id="contact-form">` and set **`action="https://formspree.io/f/YOUR_ID"`** (replace `REPLACE_ME` with your real form ID).
+3. The script submits with **`fetch`** + **`Accept: application/json`** so the page stays put and shows success/error text.
+4. **Honeypot:** the hidden field **`name="_gotcha"`** is Formspree’s spam field — leave it as-is (empty).
+5. **Optional file** (`valuation_report`): Formspree only accepts file uploads on **paid plans** that include attachments (see [Formspree file uploads](https://help.formspree.io/articles/building-your-form/file-uploads)). On Free, omit the file input or leave it — if a user attaches a file and your plan rejects it, Formspree will return an error you can fix by upgrading or removing the field.
+
+**Subject line:** the script appends **`_subject`** as `Free case review — {name}` so inbox threads are easy to scan.
 
 ## Run locally
 
-Double-click `index.html`, or for a proper local server:
-
 ```bash
-# Python (any 3.x)
 python -m http.server 8080
-
-# or Node
-npx serve .
+# or: npx serve .
 ```
 
-Then open http://localhost:8080.
+Open http://localhost:8080 — the form still POSTs to Formspree on the internet (needs your real `action` URL).
 
 ## Editing copy
 
@@ -37,59 +38,22 @@ Almost all text lives in `index.html`. Section landmarks:
 - **Don'ts** — `<section ... id="donts">`
 - **Process** — `<section ... id="process">`
 - **Fees** — `<section ... id="fees">`
-- **Results / testimonials** — `<section ... id="results">`
+- **Results** — `<section ... id="results">`
 - **Horizon callout** — `<aside class="horizon-card">`
 - **Contact + form** — `<section ... id="contact">`
 - **Footer** — `<footer class="site-footer">`
 
-### Replacing the wizard logo
+## Deploy
 
-Drop the real wizard artwork in at `assets/logo.svg` (keep the same filename) and every spot — header, hero, fees, footer — updates automatically. SVG is preferred; PNG works if you change the file extension references.
+### Render (Static Site)
 
-### Real testimonials
+1. New **Static Site** → connect the repo. Build and publish the root (no build command required, or `echo` no-op).
+2. Set your custom domain if needed.
+3. Ensure **`index.html`** already uses your live Formspree `action` URL (HTTPS).
 
-Open `index.html` and find the `results-grid`. Each `<article class="result-card">` has:
+### Netlify / Cloudflare Pages / GitHub Pages
 
-- Star count
-- Quote
-- Initials (`<span class="avatar">`) and `result-card__name` / `result-card__source`
-- `result-card__win-amt` (the green "+$X,XXX" figure)
-
-Duplicate the block to add more, delete blocks you don't want.
-
-### Contact details
-
-`hello@writeoffwhiz.com` is used in three places (header CTA → form, contact section button, footer). Search and replace if it changes. Add Manny's phone number in:
-
-- The contact section (`<section ... id="contact">`) — drop a `tel:` button next to the email button.
-- The footer's "Contact Manny" list.
-
-## Wiring up the contact form for real
-
-Right now the form opens the visitor's email client (mailto fallback). To get submissions delivered to an inbox or webhook, swap the JS handler in `script.js` for one of these:
-
-### Option A — Formspree (fastest, free tier)
-
-1. Create a form at https://formspree.io and copy your endpoint (looks like `https://formspree.io/f/abcdwxyz`).
-2. In `index.html`, add `action` and `method` to the form:
-   ```html
-   <form class="contact-form" id="contact-form" action="https://formspree.io/f/abcdwxyz" method="POST" novalidate>
-   ```
-3. In `script.js`, replace the `window.location.href = href;` line with:
-   ```js
-   const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
-   if (res.ok) { form.reset(); setStatus("Thanks — I'll reply within one business day.", 'success'); }
-   else { setStatus('Something went wrong. Please email hello@writeoffwhiz.com directly.', 'error'); }
-   ```
-   And mark the submit handler `async`.
-
-### Option B — Netlify Forms (zero config if you host on Netlify)
-
-Add `data-netlify="true"` and a hidden `form-name` input to the `<form>`, then deploy. Netlify auto-creates the inbox.
-
-### Option C — Web3Forms / Getform / Basin
-
-Same idea — point `action` to their endpoint.
+Connect the repo; publish directory = project root. Same Formspree `action` works from any static host.
 
 ## SEO checklist
 
@@ -101,25 +65,6 @@ Same idea — point `action` to their endpoint.
 - [ ] Add `assets/apple-touch-icon.png` (180×180)
 - [ ] Submit `sitemap.xml` to Google Search Console once domain is live
 - [ ] Add Google Analytics or Plausible script before `</head>` if desired
-
-## Deploy
-
-### Netlify (drag-and-drop)
-
-1. Zip the project folder.
-2. Visit https://app.netlify.com/drop and drop the zip.
-3. Point your domain at the new Netlify site.
-
-### Vercel
-
-```bash
-npm i -g vercel
-vercel
-```
-
-### Cloudflare Pages / GitHub Pages
-
-Push the folder to a Git repo, connect it in the dashboard, output directory = root.
 
 ## Voice & language notes
 

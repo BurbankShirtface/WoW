@@ -47,7 +47,7 @@
   }
 
   // --- Reveal-on-scroll (subtle) ---
-  const revealTargets = $$('.dont-card, .process-card, .result-card, .horizon-card, .contact-form, .hero__slogan');
+  const revealTargets = $$('.dont-card, .process-card, .results-carousel, .horizon-card, .contact-form, .hero__slogan');
   if ('IntersectionObserver' in window && revealTargets.length) {
     revealTargets.forEach(el => {
       el.style.opacity = '0';
@@ -66,12 +66,13 @@
     revealTargets.forEach(el => io.observe(el));
   }
 
-  // --- Contact form: validate + submit via mailto fallback ---
-  // When a real backend (Formspree, Netlify Forms, Web3Forms, etc.) is wired up,
-  // replace the body of `submit` below with a fetch() to that endpoint.
+  // --- Contact form: Formspree (same form action URL) ---
   const form = $('#contact-form');
   if (form) {
     const status = $('.contact-form__status', form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const maxBytes = 25 * 1024 * 1024;
+    const endpoint = form.getAttribute('action') || '';
 
     const setStatus = (msg, kind) => {
       if (!status) return;
@@ -80,49 +81,149 @@
       if (kind) status.classList.add(`is-${kind}`);
     };
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       setStatus('');
 
-      // Clear previous field errors
-      $$('.field', form).forEach(f => f.classList.remove('field--error'));
+      $$('.field', form).forEach((f) => f.classList.remove('field--error'));
 
-      const data = {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-        claim_type: form.claim_type.value,
-        vehicle: form.vehicle.value.trim(),
-        message: form.message.value.trim(),
-      };
+      const name = (form.elements.namedItem('name')?.value ?? '').trim();
+      const email = (form.elements.namedItem('email')?.value ?? '').trim();
+      const fileInput = form.querySelector('[name="valuation_report"]');
+      const file = fileInput?.files?.[0] ?? null;
 
       const errors = [];
-      if (!data.name) { errors.push('name'); }
-      if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) { errors.push('email'); }
-      if (!data.claim_type) { errors.push('claim_type'); }
+      if (!name) errors.push('name');
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) errors.push('email');
+
+      if (endpoint.includes('REPLACE_ME')) {
+        setStatus(
+          'Form is not configured yet — replace REPLACE_ME in index.html with your Formspree form ID.',
+          'error',
+        );
+        return;
+      }
+
+      if (file && file.size > maxBytes) {
+        fileInput.closest('.field')?.classList.add('field--error');
+        setStatus('That file is too large. Formspree allows up to 25 MB per file on supported plans.', 'error');
+        return;
+      }
 
       if (errors.length) {
-        errors.forEach(name => {
-          const input = form.querySelector(`[name="${name}"]`);
+        errors.forEach((fieldName) => {
+          const input = form.querySelector(`[name="${fieldName}"]`);
           if (input) input.closest('.field')?.classList.add('field--error');
         });
         setStatus('Please fill out the required fields.', 'error');
         return;
       }
 
-      // Mailto fallback — opens user's email client with prefilled message.
-      const subject = `Free case review — ${data.name}${data.vehicle ? ' / ' + data.vehicle : ''}`;
-      const body =
-`Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone || '—'}
-Claim type: ${data.claim_type}
-Vehicle: ${data.vehicle || '—'}
+      const fd = new FormData(form);
+      fd.append('_subject', `Free case review — ${name}`);
+      if (submitBtn) submitBtn.disabled = true;
 
-${data.message || ''}`;
-      const href = `mailto:hello@writeoffwhiz.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = href;
-      setStatus('Opening your email app… If nothing happens, email hello@writeoffwhiz.com directly.', 'success');
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: fd,
+          headers: { Accept: 'application/json' },
+        });
+
+        let payload = {};
+        try {
+          payload = await res.json();
+        } catch (_) {
+          /* non-JSON */
+        }
+
+        if (res.ok) {
+          setStatus('Thanks — your message was sent. We will be in touch soon.', 'success');
+          form.reset();
+          return;
+        }
+
+        const formErrors = payload.errors
+          ? Object.values(payload.errors).flat().filter(Boolean).join(' ')
+          : '';
+        const msg =
+          payload.error ||
+          formErrors ||
+          'Something went wrong. Please try again or email help@writeoffwhiz.ca.';
+        setStatus(msg, 'error');
+      } catch (err) {
+        setStatus(
+          'Could not reach Formspree. Check your connection or try again later.',
+          'error',
+        );
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
     });
+  }
+
+  // --- Results: reviews carousel (3 per slide, autoplay) ---
+  const resultsCarousel = $('#results-carousel');
+  const resultsTrack = $('#results-carousel-track');
+  if (resultsCarousel && resultsTrack) {
+    const slideCount = $$('.results-carousel__slide', resultsTrack).length;
+    let index = 0;
+    let timer = null;
+
+    const reducedMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) {
+      resultsCarousel.classList.add('is-reduced-motion');
+    }
+
+    const goTo = (nextIndex) => {
+      index = ((nextIndex % slideCount) + slideCount) % slideCount;
+      const pct = (100 / slideCount) * index;
+      resultsTrack.style.transform = `translate3d(-${pct}%, 0, 0)`;
+    };
+
+    const restartAutoplay = () => {
+      if (timer) window.clearInterval(timer);
+      if (reducedMotion || slideCount <= 1) return;
+      timer = window.setInterval(() => goTo(index + 1), 5000);
+    };
+
+    const step = (dir) => {
+      goTo(index + dir);
+      restartAutoplay();
+    };
+
+    $('.results-carousel__arrow--prev', resultsCarousel)?.addEventListener(
+      'click',
+      () => step(-1),
+    );
+    $('.results-carousel__arrow--next', resultsCarousel)?.addEventListener(
+      'click',
+      () => step(1),
+    );
+
+    resultsCarousel.addEventListener('mouseenter', () => {
+      if (timer) window.clearInterval(timer);
+    });
+    resultsCarousel.addEventListener('mouseleave', restartAutoplay);
+
+    resultsCarousel.addEventListener('focusin', () => {
+      if (timer) window.clearInterval(timer);
+    });
+    resultsCarousel.addEventListener('focusout', (e) => {
+      if (!resultsCarousel.contains(e.relatedTarget)) restartAutoplay();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (timer) window.clearInterval(timer);
+      } else {
+        restartAutoplay();
+      }
+    });
+
+    goTo(0);
+    restartAutoplay();
   }
 })();
