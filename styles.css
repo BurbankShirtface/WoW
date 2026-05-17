@@ -376,6 +376,56 @@ p {
 .eyebrow--gold {
   color: var(--gold-500);
 }
+/* Light sections: navy label + gold rule (WCAG-friendly vs gold on white) */
+:is(.section--light, .section--paper-warm, .section--cream) .eyebrow--gold {
+  color: var(--navy-800);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+:is(.section--light, .section--paper-warm, .section--cream)
+  .section__head--center
+  .eyebrow--gold {
+  align-items: center;
+}
+:is(.section--light, .section--paper-warm, .section--cream)
+  .eyebrow--gold::after {
+  content: "";
+  display: block;
+  width: 2.75em;
+  min-width: 32px;
+  height: 3px;
+  margin-top: 7px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--gold-500) 0%,
+    var(--gold-600) 100%
+  );
+}
+:is(.section--light, .section--paper-warm) .highlight-gold {
+  color: var(--navy-800);
+  text-decoration: underline;
+  text-decoration-color: var(--gold-500);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.1em;
+}
+/* Dark sections: gold label + white rule */
+.section--dark .eyebrow--gold {
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.section--dark .eyebrow--gold::after {
+  content: "";
+  display: block;
+  width: 2.75em;
+  min-width: 32px;
+  height: 3px;
+  margin-top: 7px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.9);
+}
 .eyebrow--pill {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -452,6 +502,9 @@ p {
 .section__head .display {
   margin-top: 14px;
 }
+.section__head--solo {
+  margin-bottom: 0;
+}
 
 /* ============== HERO ============== */
 .hero {
@@ -511,7 +564,8 @@ p {
 }
 .hero__copy .lede {
   color: rgba(255, 255, 255, 0.78);
-  margin-top: 22px;
+  margin-top: clamp(28px, 3.5vw, 40px);
+  margin-bottom: clamp(12px, 2vw, 20px);
   max-width: 60ch;
 }
 .hero__copy .lede + .lede {
@@ -535,7 +589,7 @@ p {
   flex-direction: column;
   align-items: center;
   gap: 0;
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 1;
   align-self: center;
 }
@@ -557,7 +611,7 @@ p {
   letter-spacing: inherit;
   text-transform: none;
   text-wrap: balance;
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 2;
 }
 .hero__affiliation {
@@ -587,7 +641,7 @@ p {
   padding: 14px clamp(24px, 3.2vw, 44px) 16px;
   max-width: min(100%, 64rem);
   display: grid;
-  grid-template-columns: auto minmax(18rem, 1fr) auto;
+  grid-template-columns: minmax(18rem, 1fr) auto;
   grid-template-rows: auto auto;
   align-items: center;
   column-gap: clamp(14px, 2vw, 22px);
@@ -629,14 +683,6 @@ p {
   outline-offset: 2px;
   border-radius: 2px;
 }
-.hero__affiliation .hero__affiliation-pill .dot {
-  flex-shrink: 0;
-  margin-top: 0;
-  grid-column: 1;
-  grid-row: 1 / -1;
-  justify-self: center;
-  align-self: center;
-}
 .hero__affiliation-fb {
   display: inline-flex;
   align-items: center;
@@ -653,7 +699,7 @@ p {
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease;
-  grid-column: 3;
+  grid-column: 2;
   grid-row: 1 / -1;
   justify-self: center;
   align-self: center;
@@ -758,6 +804,9 @@ p {
   letter-spacing: -0.01em;
 }
 
+.hero__slogan--copy {
+  display: none;
+}
 @media (max-width: 900px) {
   .hero {
     --hero-below-content: 48px;
@@ -767,6 +816,22 @@ p {
   }
   .hero__visual {
     order: -1;
+  }
+  .hero__logo-ring {
+    width: clamp(200px, 62vw, 280px);
+  }
+  .hero__slogan--visual {
+    display: none;
+  }
+  .hero__slogan--copy {
+    display: block;
+    margin-top: clamp(20px, 4vw, 28px);
+    margin-bottom: clamp(12px, 2.5vw, 20px);
+    margin-inline: auto;
+    text-align: center;
+  }
+  .hero__cta {
+    margin-top: clamp(32px, 6vw, 44px);
   }
 }
 
@@ -949,8 +1014,14 @@ p {
 
 /* ============== FEES ============== */
 .section--fees {
-  padding-top: clamp(56px, 8vw, 100px);
-  padding-bottom: clamp(56px, 8vw, 100px);
+  padding-top: clamp(72px, 10vw, 128px);
+  padding-bottom: clamp(72px, 10vw, 128px);
+}
+.fees__copy .display {
+  margin-top: clamp(14px, 2vw, 22px);
+}
+.fees__copy .lede {
+  margin-top: clamp(28px, 4vw, 40px);
 }
 .fees__grid {
   display: grid;
@@ -986,9 +1057,9 @@ p {
   filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.4));
 }
 .fees__list {
-  margin: 22px 0 22px;
+  margin: clamp(28px, 3.5vw, 36px) 0 clamp(24px, 3vw, 32px);
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 .fees__list li {
   display: grid;
@@ -1034,7 +1105,25 @@ p {
   color: var(--ink);
 }
 .callout--light .callout__title {
-  color: var(--gold-700);
+  color: var(--navy-800);
+  width: fit-content;
+  margin-inline: auto;
+  padding-bottom: 8px;
+  position: relative;
+}
+.callout--light .callout__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--gold-500) 0%,
+    var(--gold-600) 100%
+  );
 }
 .callout--light p {
   color: var(--ink-mute);
@@ -1705,13 +1794,8 @@ p {
     font-size: clamp(26px, 5.4vw, 40px);
   }
   .hero__copy .lede {
-    margin-top: 16px;
-  }
-  .hero__cta {
-    margin-top: 22px;
-  }
-  .hero__visual {
-    gap: 14px;
+    margin-top: clamp(26px, 4.5vw, 36px);
+    margin-bottom: clamp(14px, 2.5vw, 22px);
   }
   .fees__list li,
   .callout p {
@@ -1741,11 +1825,6 @@ p {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     justify-items: center;
-  }
-  .hero__affiliation .hero__affiliation-pill .dot {
-    grid-column: 1;
-    grid-row: auto;
-    margin-top: 0;
   }
   .hero__affiliation-primary {
     grid-column: 1;
@@ -1807,7 +1886,8 @@ p {
   }
   .hero__copy .lede {
     font-size: 15px;
-    margin-top: 22px;
+    margin-top: clamp(28px, 6vw, 40px);
+    margin-bottom: clamp(16px, 3vw, 24px);
     line-height: 1.65;
   }
   .hero__cta {
@@ -1815,7 +1895,7 @@ p {
     align-items: stretch;
     gap: 12px;
     width: 100%;
-    margin-top: 32px;
+    margin-top: clamp(36px, 7vw, 48px);
   }
   .hero__cta .btn {
     width: 100%;
@@ -1823,13 +1903,11 @@ p {
     padding-top: 18px;
     padding-bottom: 18px;
   }
-  .hero__visual {
-    gap: 22px;
-  }
   .hero__slogan {
     font-size: 18px;
     line-height: 1.45;
     padding: 0 4px;
+    margin-top: clamp(22px, 5vw, 32px);
   }
 
   .eyebrow--pill:not(.hero__affiliation-pill) {
@@ -1957,7 +2035,7 @@ p {
     font-size: 22px;
   }
   .hero__logo-ring {
-    width: 92%;
+    width: min(88%, 250px);
   }
   .container {
     padding-inline: 20px;
