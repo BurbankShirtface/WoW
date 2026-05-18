@@ -1910,8 +1910,31 @@ p {
   gap: 8px;
   font-size: 14px;
 }
+.site-footer__service-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  color: var(--gold-500);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease;
+}
+.site-footer__service-link-icon {
+  width: 0.85em;
+  height: 0.85em;
+  flex-shrink: 0;
+}
 .site-footer a:hover {
   color: var(--gold-500);
+}
+.site-footer__services .site-footer__service-link:hover {
+  color: #fff;
+}
+.site-footer__services .site-footer__service-link:focus-visible {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 .site-footer li.muted a {
   color: inherit;
