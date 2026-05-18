@@ -812,7 +812,7 @@ p {
   aspect-ratio: 3 / 2;
   display: grid;
   place-items: center;
-  padding: 4%;
+  padding: 5.5%;
   background:
     radial-gradient(
       closest-side,
@@ -853,8 +853,8 @@ p {
     max-width: 100%;
     margin-inline: auto;
     margin-top: clamp(4px, 1.5vw, 12px);
-    margin-bottom: clamp(20px, 5vw, 32px);
-    padding: 5%;
+    margin-bottom: clamp(32px, 8vw, 48px);
+    padding: 6.5%;
     border-radius: 18px;
   }
   .hero__copy-head {
@@ -1225,6 +1225,13 @@ p {
   }
   .fees__visual {
     order: -1;
+  }
+  .fees__logo-ring {
+    width: min(72vw, 300px);
+    aspect-ratio: auto;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
   }
 }
 
