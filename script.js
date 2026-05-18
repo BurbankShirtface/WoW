@@ -64,7 +64,7 @@
   }
 
   // --- Reveal-on-scroll (subtle) ---
-  const revealTargets = $$('.dont-card, .process-card, .results-carousel, .horizon-card, .contact-form, .hero__slogan');
+  const revealTargets = $$('.dont-card, .process-card, .results-carousel, .horizon-card, .contact-form, .contact__slogan, .about-highlight, .hero__guarantee');
   if ('IntersectionObserver' in window && revealTargets.length) {
     revealTargets.forEach(el => {
       el.style.opacity = '0';
@@ -88,7 +88,6 @@
   if (form) {
     const status = $('.contact-form__status', form);
     const submitBtn = form.querySelector('button[type="submit"]');
-    const maxBytes = 25 * 1024 * 1024;
     const endpoint = form.getAttribute('action') || '';
 
     const setStatus = (msg, kind) => {
@@ -106,8 +105,6 @@
 
       const name = (form.elements.namedItem('name')?.value ?? '').trim();
       const email = (form.elements.namedItem('email')?.value ?? '').trim();
-      const fileInput = form.querySelector('[name="valuation_report"]');
-      const file = fileInput?.files?.[0] ?? null;
 
       const errors = [];
       if (!name) errors.push('name');
@@ -118,12 +115,6 @@
           'Form is not configured yet — replace REPLACE_ME in index.html with your Formspree form ID.',
           'error',
         );
-        return;
-      }
-
-      if (file && file.size > maxBytes) {
-        fileInput.closest('.field')?.classList.add('field--error');
-        setStatus('That file is too large. Formspree allows up to 25 MB per file on supported plans.', 'error');
         return;
       }
 

@@ -74,7 +74,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="styles.css?v=24" />
+    <link rel="stylesheet" href="styles.css?v=25" />
 
     <script type="application/ld+json">
       {
@@ -140,7 +140,21 @@
       <section class="hero">
         <div class="hero__bg" aria-hidden="true"></div>
         <div class="container hero__grid">
-          <div class="hero__copy">
+          <div class="hero__visual">
+            <div class="hero__logo-ring">
+              <img
+                src="assets/writeOffWhizWhite.png"
+                alt="Write Off Whiz"
+                width="520"
+                height="347"
+              />
+            </div>
+            <p class="hero__guarantee">
+              If I don't win,
+              <span class="hero__guarantee-accent">you don't pay.</span>
+            </p>
+          </div>
+          <div class="hero__copy-head">
             <h1 class="display">
               Your insurance company has deemed your vehicle a
               <span class="highlight-white">write-off</span>.
@@ -148,16 +162,14 @@
                 >Their first offer isn't your only option.</span
               >
             </h1>
+          </div>
+          <div class="hero__copy-body">
             <p class="lede">
               Whether your vehicle was written off due to a collision or
               unrecovered theft, insurance companies routinely undervalue total
               loss claims. The higher the value of your vehicle, the greater the
               potential there is of your insurance provider saving money by
               undervaluing your vehicle.
-            </p>
-            <p class="hero__slogan hero__slogan--copy">
-              The insurance company has experts.<br aria-hidden="true" />
-              <span class="hero__slogan-accent">You should too.</span>
             </p>
             <div class="hero__cta">
               <a href="#process" class="btn btn--primary btn--lg">
@@ -175,21 +187,6 @@
               </a>
               <a href="#about" class="btn btn--ghost btn--lg">Who I Am</a>
             </div>
-          </div>
-
-          <div class="hero__visual">
-            <div class="hero__logo-ring">
-              <img
-                src="assets/writeOffWhizWhite.png"
-                alt="Write Off Whiz"
-                width="520"
-                height="347"
-              />
-            </div>
-            <p class="hero__slogan hero__slogan--visual">
-              The insurance company has experts.<br aria-hidden="true" />
-              <span class="hero__slogan-accent">You should too.</span>
-            </p>
           </div>
         </div>
 
@@ -225,26 +222,6 @@
           </div>
         </div>
 
-        <div class="trust-strip">
-          <div class="container trust-strip__row">
-            <div class="trust-strip__item">
-              <span class="trust-strip__dot"></span>If I don't win, you don't
-              pay
-            </div>
-            <div class="trust-strip__item">
-              <span class="trust-strip__dot"></span>Every case is personally
-              handled by me from start to finish
-            </div>
-            <div class="trust-strip__item">
-              <span class="trust-strip__dot"></span>27 years in the automotive
-              industry
-            </div>
-            <div class="trust-strip__item">
-              <span class="trust-strip__dot"></span>Former Sales Manager &amp;
-              General Manager of new car dealerships
-            </div>
-          </div>
-        </div>
       </section>
 
       <!-- PROCESS -->
@@ -784,6 +761,23 @@
               off, and I also know precisely how to fight back.
             </p>
           </div>
+
+          <ul class="about-highlights" aria-label="Why work with Manny">
+            <li class="about-highlight">
+              <p>
+                Every case is personally handled by me from start to finish
+              </p>
+            </li>
+            <li class="about-highlight">
+              <p>27 years in the automotive industry</p>
+            </li>
+            <li class="about-highlight">
+              <p>
+                Former Sales Manager &amp; General Manager of new car
+                dealerships
+              </p>
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -809,9 +803,9 @@
               <h3>Need help finding your next vehicle?</h3>
               <p>
                 Through Horizon Automotive Solutions, I can also help you find a
-                replacement vehicle. If you purchase through one of my trusted
-                dealer professionals, there is
-                <strong>no cost to you</strong> whatsoever.
+                replacement vehicle. When you purchase through one of my trusted
+                dealer professionals, there is no cost to you for my purchase
+                assistance.
               </p>
             </div>
             <div class="horizon-card__actions">
@@ -877,9 +871,12 @@
             <h2 class="display display--md">Don't accept their first offer.</h2>
             <p class="lede lede--light">
               Send me the insurer's valuation report and I'll tell you honestly
-              whether it's fair at no charge and no obligation.
+              whether it's fair, at no charge and no obligation.
             </p>
-            <p class="contact__small">If I don't win, you don't pay.</p>
+            <p class="contact__slogan">
+              The insurance company has experts.<br aria-hidden="true" />
+              <span class="contact__slogan-accent">You should too.</span>
+            </p>
           </div>
 
           <!-- Contact form: set action to your Formspree URL (replace REPLACE_ME). -->
@@ -939,24 +936,6 @@
                   autocomplete="tel"
                 />
               </div>
-            </div>
-
-            <div class="field">
-              <label for="cf-valuation"
-                >Insurer's valuation report
-                <span class="field__hint">(optional)</span></label
-              >
-              <input
-                id="cf-valuation"
-                name="valuation_report"
-                type="file"
-                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/webp"
-              />
-              <span class="field__note"
-                >Optional. File uploads require a Formspree plan that includes
-                attachments (e.g. Personal+), up to 25&nbsp;MB per
-                Formspree.</span
-              >
             </div>
 
             <button class="btn btn--primary btn--lg btn--full" type="submit">
