@@ -1698,6 +1698,32 @@ p {
   color: var(--gold-500);
   letter-spacing: -0.01em;
 }
+.contact__phone {
+  margin-top: clamp(24px, 4vw, 36px);
+}
+.contact__phone-link {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+  letter-spacing: -0.02em;
+  color: var(--gold-500);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.contact__phone-link:hover {
+  color: #fff;
+}
+.contact__phone-link:focus-visible {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.contact__phone-note {
+  margin: 0.45em 0 0;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.72);
+}
 .contact-form {
   position: relative;
   background: #fff;
@@ -1935,6 +1961,10 @@ p {
   outline: 2px solid var(--gold-500);
   outline-offset: 3px;
   border-radius: 2px;
+}
+.site-footer__phone-note {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
 }
 .site-footer li.muted a {
   color: inherit;
