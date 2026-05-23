@@ -60,10 +60,11 @@ Connect the repo; publish directory = project root. Same Formspree `action` work
 - [x] Title + meta description
 - [x] Open Graph + Twitter card meta
 - [x] JSON-LD `ProfessionalService` schema
-- [x] Canonical URL (update once the real domain is live)
+- [x] Canonical URL (`https://writeoffwhiz.ca/`)
 - [ ] Add `assets/og-image.png` (1200×630) — used by Facebook, LinkedIn, iMessage, etc.
 - [ ] Add `assets/apple-touch-icon.png` (180×180)
-- [ ] Submit `sitemap.xml` to Google Search Console once domain is live
+- [x] `sitemap.xml` + `robots.txt` at site root
+- [ ] Submit `https://writeoffwhiz.ca/sitemap.xml` in [Google Search Console](https://search.google.com/search-console)
 - [ ] Add Google Analytics or Plausible script before `</head>` if desired
 
 ## Voice & language notes
