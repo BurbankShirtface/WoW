@@ -87,8 +87,6 @@
   const form = $('#contact-form');
   if (form) {
     const status = $('.contact-form__status', form);
-    const formBody = $('.contact-form__body', form);
-    const successPanel = $('.contact-form__success', form);
     const submitBtn = form.querySelector('button[type="submit"]');
     const endpoint = form.getAttribute('action') || '';
 
@@ -101,8 +99,6 @@
 
     const showSuccess = () => {
       form.classList.add('contact-form--success');
-      if (formBody) formBody.hidden = true;
-      if (successPanel) successPanel.hidden = false;
       if (status) {
         status.textContent = '';
         status.classList.remove('is-success', 'is-error');
