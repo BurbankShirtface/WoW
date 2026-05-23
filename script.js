@@ -87,6 +87,8 @@
   const form = $('#contact-form');
   if (form) {
     const status = $('.contact-form__status', form);
+    const formBody = $('.contact-form__body', form);
+    const successPanel = $('.contact-form__success', form);
     const submitBtn = form.querySelector('button[type="submit"]');
     const endpoint = form.getAttribute('action') || '';
 
@@ -95,6 +97,16 @@
       status.textContent = msg || '';
       status.classList.remove('is-success', 'is-error');
       if (kind) status.classList.add(`is-${kind}`);
+    };
+
+    const showSuccess = () => {
+      form.classList.add('contact-form--success');
+      if (formBody) formBody.hidden = true;
+      if (successPanel) successPanel.hidden = false;
+      if (status) {
+        status.textContent = '';
+        status.classList.remove('is-success', 'is-error');
+      }
     };
 
     form.addEventListener('submit', async (e) => {
@@ -146,8 +158,8 @@
         }
 
         if (res.ok) {
-          setStatus('Thanks — your message was sent. We will be in touch soon.', 'success');
           form.reset();
+          showSuccess();
           return;
         }
 
@@ -165,7 +177,9 @@
           'error',
         );
       } finally {
-        if (submitBtn) submitBtn.disabled = false;
+        if (submitBtn && !form.classList.contains('contact-form--success')) {
+          submitBtn.disabled = false;
+        }
       }
     });
   }
