@@ -360,6 +360,13 @@ p {
 .display .block {
   display: block;
 }
+.hero__headline-line {
+  display: block;
+  white-space: nowrap;
+}
+.hero__headline-nowrap {
+  white-space: nowrap;
+}
 .lede {
   font-size: clamp(16px, 1.6vw, 18px);
   color: var(--ink-mute);
